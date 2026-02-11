@@ -21,8 +21,12 @@ export default function LoginLayout({
       return;
     }
 
-    if (currentUser) {
-      router.replace('/question');
+    if (currentUser && currentUser?.role === 'CUSTOMER') {
+      router.replace('/');
+    }
+
+    if (currentUser && currentUser?.role === 'ADMIN') {
+      router.replace('/admin');
     }
   }, [currentUser, router]);
 

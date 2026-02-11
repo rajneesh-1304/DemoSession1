@@ -8,4 +8,8 @@ export class UsersDefinition {
   @IsEmail()
   @IsNotEmpty()
   email: string;
+
+  @IsString()
+  @IsNotEmpty()
+  role: string;
 }

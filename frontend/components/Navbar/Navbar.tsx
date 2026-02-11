@@ -25,10 +25,10 @@ const Navbar: React.FC<NavbarProps> = ({ searchValue, setSearchValue }) => {
     <header className="so-navbar">
       <div className="so-logo" onClick={() => router.push('/')}>
         <img
-          src="https://4.imimg.com/data4/DB/QV/MY-29214035/library-management-system.jpg"
+          src="https://cdn-icons-png.flaticon.com/512/7541/7541900.png"
           alt="Logo"
         />
-        <span>Library <span className="orange-text">Management</span></span>
+        <span>Food <span className="orange-text">Delivery</span></span>
       </div>
 
       {/* <nav className="so-nav-links">
@@ -46,7 +46,12 @@ const Navbar: React.FC<NavbarProps> = ({ searchValue, setSearchValue }) => {
         />
       </div>
 
-      {/* Auth Buttons */}
+      {currentUser?.role === 'CUSTOMER' && (
+        <button className="cart_button" onClick={() => router.push('/cart')}>
+          Cart
+        </button>
+      )}
+
       <div className="so-auth">
         {!currentUser ? (
           <>

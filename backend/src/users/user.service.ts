@@ -6,13 +6,12 @@ import {
 } from '@nestjs/common';
 import { DataSource } from 'typeorm';
 import { User } from './user.entity';
-import { UserRole } from './user.entity';
 
 @Injectable()
 export class UserService {
   constructor(private readonly dataSource: DataSource) {}
 
-  async register(data: { displayName: string; email: string }) {
+  async register(data: any) {
     const userRepo = this.dataSource.getRepository(User);
 
     const existingUser = await userRepo.findOne({
@@ -26,7 +25,7 @@ export class UserService {
     const user = userRepo.create({
       displayName: data.displayName,
       email: data.email,
-      role: UserRole.USER,
+      role: data.role,
     });
 
     await userRepo.save(user);

@@ -1,0 +1,18 @@
+.cart_button{
+  border: 2px solid rgb(236, 233, 233);
+  padding: 6px 17px;
+  font-size: 18px;
+  border-radius: 10px;
+  background-color: rgb(255, 250, 250);
+  color: black;
+  cursor: pointer;
+}
+
+.main-form{
+    padding:20px
+}
+
+.address{
+    margin:10px;
+    
+}

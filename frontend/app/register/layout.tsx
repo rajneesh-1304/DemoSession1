@@ -15,17 +15,20 @@ export default function RegisterLayout({
     (state) => state.users.currentUser
   );
 
-  useEffect(() => {
+   useEffect(() => {
     if (!currentUser) {
+      router.replace('/register');
       return;
     }
 
-    if (currentUser) {
-      router.replace('/question');
+    if (currentUser && currentUser?.role === 'CUSTOMER') {
+      router.replace('/');
     }
 
+    if (currentUser && currentUser?.role === 'ADMIN') {
+      router.replace('/admin');
+    }
   }, [currentUser, router]);
-
 
   return <>{children}</>;
 }

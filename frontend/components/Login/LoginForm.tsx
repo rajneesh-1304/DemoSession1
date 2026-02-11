@@ -43,6 +43,7 @@ export default function LoginForm() {
   const dispatch = useDispatch<AppDispatch>();
   const router = useRouter();
   const err = useAppSelector((state: any) => state.users.error)
+  const currentUser = useAppSelector((state: any) => state.users.currentUser)
 
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState("");
@@ -56,7 +57,6 @@ export default function LoginForm() {
   const {
     register,
     handleSubmit,
-    watch,
     formState: { errors },
   } = useForm({
     resolver: zodResolver(LoginUserSchema),
@@ -78,46 +78,20 @@ export default function LoginForm() {
         email: user.email
       }
 
-      const loginResponse = await dispatch(loginThunk( loginData));
-
-      if (loginThunk.fulfilled.match(loginResponse)) {
-        setSnackbarMessage("Login successful!");
-        setSnackbarOpen(true);
-        router.push('/question')
-      } 
-    } catch (error) {
-      await signOut(auth);
-        setSnackbarMessage(error);
-        setSnackbarOpen(true);
-    }
-  };
-
-  const handleSignInGithub = async () => {
-    try {
-      const result = await signInWithPopup(auth, gitProvider);
-      const user = result.user;
-
-      const loginData = {
-        email: user.email
-      }
-
       const loginResponse = await dispatch(loginThunk(loginData));
 
       if (loginThunk.fulfilled.match(loginResponse)) {
         setSnackbarMessage("Login successful!");
         setSnackbarOpen(true);
-        router.push('/question')
-      } else {
-        await signOut(auth);
-        setSnackbarMessage("User does not exist, Register First!");
-        setSnackbarOpen(true);
+        setTimeout(() => router.push('/'), 1200);
       }
     } catch (error) {
-      console.error(error);
-      setSnackbarMessage(error);
+      await signOut(auth);
+      setSnackbarMessage(error.message);
       setSnackbarOpen(true);
     }
-  }
+  };
+
 
   const onSubmit = async (data: LoginFormInputs) => {
     try {
@@ -129,9 +103,15 @@ export default function LoginForm() {
       const loginResponse = await dispatch(loginThunk(loginData));
 
       if (loginThunk.fulfilled.match(loginResponse)) {
-        setSnackbarMessage("Login successful!");
-        setSnackbarOpen(true);
-        setTimeout(() => router.push('/question'), 1200);
+        if (loginResponse.payload.user.role === 'CUSTOMER') {
+          setSnackbarMessage("Login successful!");
+          setSnackbarOpen(true);
+          setTimeout(() => router.push('/'), 1200);
+        } else {
+          setSnackbarMessage("Login successful!");
+          setSnackbarOpen(true);
+          setTimeout(() => router.push('/admin'), 1200);
+        }
       } else {
         await signOut(auth);
         setSnackbarMessage(err);
@@ -139,9 +119,9 @@ export default function LoginForm() {
       }
 
     } catch (error: any) {
-  setSnackbarMessage(error);
-  setSnackbarOpen(true);
-}
+      setSnackbarMessage(error.message);
+      setSnackbarOpen(true);
+    }
 
   };
 
@@ -150,7 +130,7 @@ export default function LoginForm() {
 
       <form className="formm" onSubmit={handleSubmit(onSubmit)}>
         <h1 className='register_heading'>Login</h1>
-        <Box sx={{ display: "flex", flexDirection: "column", width: 300, gap: 1, mt: 1 , padding: 1, paddingBottom: 1}}>
+        <Box sx={{ display: "flex", flexDirection: "column", width: 300, gap: 1, mt: 1, padding: 1, paddingBottom: 1 }}>
           <FormControl variant="standard">
             <TextField
               label="Email"
@@ -186,7 +166,7 @@ export default function LoginForm() {
           </Button>
         </Box>
 
-        
+
       </form>
 
       <Button variant="contained" sx={{
@@ -196,12 +176,6 @@ export default function LoginForm() {
         <FcGoogle style={{ height: "30px", marginRight: "5px" }} />Sign In With Google
       </Button>
 
-      <Button variant="contained" sx={{ mt: 1.5, width: 320, backgroundColor: 'black',
-        color: 'white',}} onClick={handleSignInGithub}>
-        <FaGithub style={{ height: "30px", marginRight: "5px" }}/>Sign In With Github
-      </Button>
-
-      
       <div className="register">
         <p>
           Not Registered{" "}

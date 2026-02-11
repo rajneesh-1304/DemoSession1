@@ -21,6 +21,7 @@ import './register.css'
 import { useAppDispatch } from "@/app/redux/hooks";
 import { FcGoogle } from "react-icons/fc";
 import { FaGithub } from "react-icons/fa";
+import { FormHelperText, InputLabel, MenuItem, Select } from "@mui/material";
 
 
 const RegisterUserSchema = z.object({
@@ -42,12 +43,16 @@ const RegisterUserSchema = z.object({
     .regex(/[0-9]/, "Must contain at least one number")
     .regex(/[!@#$%^&*]/, "Must contain at least one special character"),
 
+  role: z.string("role is required"),
+
   confirmPassword: z
     .string()
     .min(1, "Confirm password is required"),
 }).refine((data: any) => data.password === data.confirmPassword, {
   message: "Passwords do not match",
   path: ["confirmPassword"],
+
+
 });
 
 type RegisterFormInputs = z.infer<typeof RegisterUserSchema>;
@@ -69,6 +74,7 @@ export default function RegisterForm() {
     }
     setSnackbarOpen(false);
   };
+
   const handleSignIn = async () => {
     try {
       const result = await signInWithPopup(auth, provider);
@@ -81,6 +87,7 @@ export default function RegisterForm() {
       const registerData = {
         displayName: user.displayName,
         email: user.email,
+        role: 'CUSTOMER'
       };
 
       const registerResponse = await dispatch(registerThunk(registerData));
@@ -105,57 +112,20 @@ export default function RegisterForm() {
     }
   };
 
-  const handleSignInGithub = async () => {
-    try {
-      const result = await signInWithPopup(auth, gitProvider);
-      const user = result.user;
-      console.log(user)
-
-      if (!user.email) {
-        throw new Error("No Github Account Present");
-      }
-
-      const registerData = {
-        displayName: user.
-          reloadUserInfo
-          .screenName,
-        email: user.email,
-      };
-
-      const registerResponse = await dispatch(registerThunk(registerData));
-
-      if (!registerThunk.fulfilled.match(registerResponse)) {
-        await signOut(auth);
-        throw new Error("Registration failed");
-      } else {
-        setSnackbarMessage("Account created successfully");
-        setSnackbarOpen(true);
-        router.push('/login')
-      }
-    } catch (error: any) {
-      const message =
-        error?.message?.includes("Email already registered") ||
-          error?.response?.data?.message?.includes("Email already registered")
-          ? "User already exists, please login"
-          : "Something went wrong";
-
-      setSnackbarMessage(message);
-      setSnackbarOpen(true);
-    }
-  }
-
   const onSubmit = async (data: RegisterFormInputs) => {
     try {
       await createUserWithEmailAndPassword(auth, data.email, data.password);
       const docRef = await addDoc(collection(db, 'auth'), {
         name: data.name,
         email: data.email,
-        password: data.password
+        password: data.password,
+        role: data.role
       });
 
       const dat = {
         displayName: data.name,
         email: data.email,
+        role: data.role
       }
       await dispatch(registerThunk(dat)).unwrap();
       setSnackbarMessage('User created successfully!');
@@ -187,6 +157,7 @@ export default function RegisterForm() {
       name: "",
       email: "",
       password: "",
+      role:""
     },
   });
 
@@ -266,6 +237,37 @@ export default function RegisterForm() {
             />
           </FormControl>
 
+          <FormControl
+            fullWidth
+            variant="outlined"
+            size="small"
+            error={!!errors.role}
+          >
+            <InputLabel
+              id="demo-simple-select-standard-label"
+              sx={{ fontSize: 14 }}
+            >
+              Role
+            </InputLabel>
+
+            <Select
+              labelId="demo-simple-select-standard-label"
+              id="demo-simple-select-standard"
+              {...register("role")}
+              sx={{
+                minHeight: 32,
+                paddingY: "2px",
+              }}
+            >
+              <MenuItem value="ADMIN">OWNER</MenuItem>
+              <MenuItem value="CUSTOMER">CUSTOMER</MenuItem>
+            </Select>
+
+            <FormHelperText sx={{ fontSize: 11, mt: 0.5 }}>
+              {errors.role?.message}
+            </FormHelperText>
+          </FormControl>
+
           <Button variant="contained" sx={{ mt: 1.5, mb: 1 }} type="submit">
             Register
           </Button>
@@ -283,11 +285,6 @@ export default function RegisterForm() {
         color: '#757575',
       }} onClick={handleSignIn}>
         <FcGoogle style={{ height: "30px", marginRight: "5px" }} />Sign Up With Google
-      </Button>
-
-      <Button variant="contained" sx={{ mt: 1.5, width: 320, backgroundColor: 'black',
-        color: 'white',}} onClick={handleSignInGithub}>
-        <FaGithub style={{ height: "30px", marginRight: "5px" }}/>Sign Up With Github
       </Button>
 
       <div

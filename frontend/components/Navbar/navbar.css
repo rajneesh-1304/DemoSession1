@@ -9,7 +9,6 @@
   font-family: Arial, sans-serif;
 }
 
-/* Logo */
 .so-logo {
   display: flex;
   align-items: center;
@@ -28,7 +27,6 @@
   color: #f48024;
 }
 
-/* Navigation Links */
 .so-nav-links {
   display: flex;
   gap: 16px;
@@ -45,7 +43,6 @@
   color: #0a95ff;
 }
 
-/* Search */
 .so-search {
   flex: 1;
   max-width: 500px;
@@ -67,10 +64,9 @@
   box-shadow: 0 0 0 2px rgba(10, 149, 255, 0.2);
 }
 
-/* Auth Buttons */
 .so-auth {
   display: flex;
-  justify-content: flex-start;
+  justify-content: center;
   align-items: center;   
   gap: 8px;
   height: 32px;
@@ -91,21 +87,19 @@
   justify-content: center;
 }
 
-/* Login */
 .auth-btn.login {
   background-color: #e7f3ff;
   border: 1px solid #0a95ff;
   color: #0a95ff;
+  margin-bottom: 10px;
 }
 
-/* Signup */
 .auth-btn.signupp {
   background-color: #0a95ff;
-  border: 1px solid #0a95ff;   /* IMPORTANT */
+  border: 1px solid #0a95ff;   
   color: #ffffff;
 }
 
-/* Hover */
 .auth-btn.login:hover {
   background-color: #dbeeff;
 }
@@ -114,7 +108,6 @@
   background-color: #0074cc;
 }
 
-/* Prevent click jump */
 .auth-btn:focus,
 .auth-btn:active {
   outline: none;
@@ -129,4 +122,14 @@
 
 .auth-btn.logout:hover {
   background-color: #d0d3d6;
+}
+
+.cart_button{
+  border: 2px solid rgb(236, 233, 233);
+  padding: 6px 17px;
+  font-size: 18px;
+  border-radius: 10px;
+  background-color: rgb(255, 250, 250);
+  color: black;
+  cursor: pointer;
 }

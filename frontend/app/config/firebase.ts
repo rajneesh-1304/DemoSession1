@@ -4,7 +4,13 @@ import { getAnalytics } from "firebase/analytics";
 import { getFirestore } from "firebase/firestore";
 
 const firebaseConfig = {
- 
+    apiKey: "AIzaSyAZS1y1re2lkoHy7xYiokukutsXvgt-J7I",
+    authDomain: "fir-41620.firebaseapp.com",
+    projectId: "fir-41620",
+    storageBucket: "fir-41620.firebasestorage.app",
+    messagingSenderId: "864636922103",
+    appId: "1:864636922103:web:6050b88de51a09b20b8bf2",
+    measurementId: "G-VE6PC9W762"
 };
 
 
