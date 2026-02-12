@@ -1,12 +1,12 @@
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import { deleteUserr, fetchUsers, loginUser, registerUser } from "./service";
-import { deleteUser } from "firebase/auth";
 
 interface User {
   id: number;
   name: string;
   email: string;
   password: string;
+  role: string;
 }
 
 interface UserState {

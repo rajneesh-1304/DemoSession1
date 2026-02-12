@@ -21,7 +21,6 @@ import { loginThunk, registerThunk } from "@/app/redux/features/users/userSlice"
 import { useAppSelector } from "@/app/redux/hooks";
 import { signOut } from "firebase/auth";
 import { FcGoogle } from "react-icons/fc";
-import { FaGithub } from "react-icons/fa";
 
 const LoginUserSchema = z.object({
   email: z.string().trim().min(1, "Email is required").email("Enter a valid email address"),
@@ -85,7 +84,7 @@ export default function LoginForm() {
         setSnackbarOpen(true);
         setTimeout(() => router.push('/'), 1200);
       }
-    } catch (error) {
+    } catch (error: any) {
       await signOut(auth);
       setSnackbarMessage(error.message);
       setSnackbarOpen(true);
