@@ -1,39 +1,50 @@
-version: '3.5'
+version: "3.5"
 
 services:
   db:
-    image: postgres
+    image: postgres:15
+    container_name: postgres
     restart: always
     environment:
-      - POSTGRES_PASSWORD=postgres
-    container_name: postgres
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: DemoSession
     volumes:
-      - ./pgdata:/var/lib/postgresql/data
+      - pgdata:/var/lib/postgresql/data
     ports:
-      - '5432:5432'
+      - "5432:5432"
 
   app:
     build:
       context: .
       dockerfile: Dockerfile
     container_name: nest-docker-postgres
+    restart: always
     environment:
-      - PORT=${PORT}
+      PORT: 3001
+      DB_HOST: db
+      DB_PORT: 5432
+      DB_USER: postgres
+      DB_PASS: postgres
+      DB_NAME: DemoSession
     ports:
-      - '3001:3001'
+      - "3001:3001"
     depends_on:
       - db
-    volumes:
-      - ./src:/app/src
 
   pgadmin:
     image: dpage/pgadmin4
-    restart: always
     container_name: nest-pgadmin4
+    restart: always
     environment:
-      - PGADMIN_DEFAULT_EMAIL=admin@admin.com
-      - PGADMIN_DEFAULT_PASSWORD=amdin
+      PGADMIN_DEFAULT_EMAIL: admin@admin.com
+      PGADMIN_DEFAULT_PASSWORD: admin
     ports:
-      - '5050:80'
+      - "5050:80"
     depends_on:
       - db
+
+volumes:
+  pgdata:
+
+# docker compose exec app npm run migration:run

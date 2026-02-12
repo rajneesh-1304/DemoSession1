@@ -19,9 +19,9 @@ async function bootstrap() {
       whitelist: true,
     }),
   );
-  dataSource.initialize()
-  .then(() => console.log("Data Source has been initialized!"))
-  .catch((err) => console.error("Error during Data Source initialization", err));
+  // dataSource.initialize()
+  // .then(() => console.log("Data Source has been initialized!"))
+  // .catch((err) => console.error("Error during Data Source initialization", err));
 
   await app.listen(3001);
 }
