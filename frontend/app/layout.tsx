@@ -16,7 +16,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Overflow Clone",
+  title: "Food Delivery",
   description: "Overflow style Q&A platform clone",
 };
 

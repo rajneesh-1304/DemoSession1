@@ -14,6 +14,8 @@ export default function Dishes(id: any) {
   const dispatch = useAppDispatch();
 
   const userId = useAppSelector((state) => state.users.currentUser?.id);
+  const restaturant  = useAppSelector((state: any)=> state.address.currentAddress);
+  console.log(restaturant, 'abcccc');
   const [loading, setLoading] = useState(false);
   const dishes = useAppSelector(
     (state) => state.dishes.dishes,

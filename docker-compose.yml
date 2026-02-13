@@ -14,9 +14,9 @@ services:
     ports:
       - "5432:5432"
 
-  app:
+  backend:
     build:
-      context: .
+      context: ./backend
       dockerfile: Dockerfile
     container_name: nest-docker-postgres
     restart: always
@@ -31,6 +31,21 @@ services:
       - "3001:3001"
     depends_on:
       - db
+    volumes:
+      - ./backend:/app
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: frontend-app
+    restart: always
+    ports:
+      - "3000:3000"
+    depends_on:
+      - backend
+    volumes:
+      - ./frontend:/app
 
   pgadmin:
     image: dpage/pgadmin4
@@ -46,5 +61,3 @@ services:
 
 volumes:
   pgdata:
-
-# docker compose exec app npm run migration:run
